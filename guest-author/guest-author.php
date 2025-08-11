@@ -190,7 +190,7 @@ if (!class_exists('BS_Guest_Author')) :
 
             $context = (BS_is_gutenberg()) ? 'side' : 'normal';
 
-            add_meta_box('BS_authordiv', __('Author'), array($this, 'render_meta_box'), $post_type, $context, 'core');
+            add_meta_box('BS_authordiv', __('Author', 'guest-author'), array($this, 'render_meta_box'), $post_type, $context, 'core');
         }
 
         /**
@@ -219,6 +219,12 @@ if (!class_exists('BS_Guest_Author')) :
                 wp_enqueue_media();
                 // Enqueue custom script that will interact with wp.media
                 wp_enqueue_script('BS_guest_author_script', plugins_url('/js/script.js', __FILE__), array('jquery'), BS_GUEST_AUTHOR_VERSION);
+
+                $js_localize = array(
+                    'bs_ajax_nonce' => wp_create_nonce('bs_ajax'),
+                );
+                wp_localize_script('BS_guest_author_script', 'bs_guest_author', $js_localize);
+
             }
         }
 
@@ -230,8 +236,13 @@ if (!class_exists('BS_Guest_Author')) :
          */
         public function BS_ajax_get_image()
         {
+            check_ajax_referer('bs_ajax');
+            
+            if(!current_user_can('edit_posts')){
+                wp_send_json_error();
+            }
+            
             if (isset($_GET['id'])) {
-
                 $image = wp_get_attachment_image(filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT), 'medium', false, array('id' => 'BS-preview-image'));
                 $data = array('image'    => $image);
                 wp_send_json_success($data);
@@ -250,6 +261,10 @@ if (!class_exists('BS_Guest_Author')) :
         {
             global $post;
 
+            if ( !isset( $_POST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'update-post_' . $post_id ) ) {
+                return;
+            }
+
             $post_type = $this->get_current_post_type();
             if (!$post || !$this->is_eligible_post_type($post_type)) return;
 
@@ -259,11 +274,11 @@ if (!class_exists('BS_Guest_Author')) :
             ) return;
 
             $meta = [
-                'BS_author_type'              =>  $_POST['BS_author_type'],
-                'BS_guest_author_name'        => sanitize_text_field($_POST['BS_guest_author_name']),
-                'BS_guest_author_url'         => isset($_POST['BS_guest_author_url']) ? sanitize_url($_POST['BS_guest_author_url']) : '',
-                'BS_guest_author_description' => isset($_POST['BS_guest_author_description']) ? sanitize_textarea_field($_POST['BS_guest_author_description']) : '',
-                'BS_guest_author_image_id'    => isset($_POST['BS_guest_author_image_id']) ? sanitize_key($_POST['BS_guest_author_image_id']) : ''
+                'BS_author_type'              => sanitize_text_field(wp_unslash($_POST['BS_author_type'])),
+                'BS_guest_author_name'        => sanitize_text_field(wp_unslash($_POST['BS_guest_author_name'])),
+                'BS_guest_author_url'         => isset($_POST['BS_guest_author_url']) ? sanitize_url(wp_unslash($_POST['BS_guest_author_url'])) : '',
+                'BS_guest_author_description' => isset($_POST['BS_guest_author_description']) ? sanitize_textarea_field(wp_unslash($_POST['BS_guest_author_description'])) : '',
+                'BS_guest_author_image_id'    => isset($_POST['BS_guest_author_image_id']) ? sanitize_key(wp_unslash($_POST['BS_guest_author_image_id'])) : ''
             ];
 
             foreach ($meta as $key => $value) {
@@ -707,8 +722,9 @@ if (!class_exists('BS_Guest_Author')) :
                 return $current_screen->post_type;
 
             //lastly check the post_type querystring
-            elseif (isset($_REQUEST['post_type']))
-                return sanitize_key($_REQUEST['post_type']);
+            //phpcs:ignore - can be called in non-nonced case
+            elseif (isset($_REQUEST['post_type'])) //phpcs:ignore
+                return sanitize_key($_REQUEST['post_type']); //phpcs:ignore
 
             //we do not know the post type!
             return null;

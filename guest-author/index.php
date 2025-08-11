@@ -3,8 +3,8 @@
 Plugin Name: Guest Author
 Plugin URI: https://wordpress.org/plugins/guest-author/
 Description: The only guest author plugin you need.
-Version: 2.5
-Tested up to: 6.6
+Version: 2.6
+Tested up to: 6.8
 Author: WebFactory Ltd
 Author URI: https://www.webfactoryltd.com/
 License: GNU General Public License v3.0
@@ -14,7 +14,7 @@ Text Domain: guest-author
 if ( !defined('ABSPATH') )
     die('-1');
 
-define('BS_GUEST_AUTHOR_VERSION', '2.5');
+define('BS_GUEST_AUTHOR_VERSION', '2.6');
 
 /**
  * Loading Guest Author class

@@ -78,6 +78,7 @@
     function Refresh_Image(the_id){
         var data = {
             action: 'BS_get_image',
+            _ajax_nonce: bs_guest_author.bs_ajax_nonce,
             id: the_id
         };
 
