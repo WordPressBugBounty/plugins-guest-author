@@ -709,6 +709,10 @@ if (!class_exists('BS_Guest_Author')) :
         {
             global $post, $typenow, $current_screen;
 
+            if(is_integer($post)){
+                return get_post_type($post);
+            }
+
             //we have a post so we can just get the post type from that
             if ($post && $post->post_type)
                 return $post->post_type;

@@ -3,7 +3,7 @@
 Plugin Name: Guest Author
 Plugin URI: https://wordpress.org/plugins/guest-author/
 Description: The only guest author plugin you need.
-Version: 2.6
+Version: 2.61
 Tested up to: 6.8
 Author: WebFactory Ltd
 Author URI: https://www.webfactoryltd.com/
