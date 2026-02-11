@@ -2,7 +2,7 @@
 Tags: author, post author, guest author, guest post, guest
 Contributors: WebFactory
 Requires at least: 4.6
-Tested up to: 6.8
+Tested up to: 6.9
 Stable tag: 2.61
 Requires PHP: 5.2.4
 License: GNU General Public License v3.0
