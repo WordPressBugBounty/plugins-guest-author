@@ -72,7 +72,7 @@ if (!class_exists('BS_Guest_Author')) :
             add_action('save_post', array($this, 'save'));
 
             add_action('admin_enqueue_scripts', array($this, 'admin_scripts'));
-            add_action('current_screen', array($this, 'remove_default_author_meta_box'));
+            add_action('add_meta_boxes', array($this, 'remove_default_author_meta_box'));
             add_action('add_meta_boxes', array($this, 'add_new_author_box'));
 
             add_filter('manage_posts_columns', array($this, 'add_author_column'));

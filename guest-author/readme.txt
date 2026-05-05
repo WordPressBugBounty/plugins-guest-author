@@ -2,8 +2,8 @@
 Tags: author, post author, guest author, guest post, guest
 Contributors: WebFactory
 Requires at least: 4.6
-Tested up to: 6.9
-Stable tag: 2.61
+Tested up to: 7.0
+Stable tag: 2.62
 Requires PHP: 5.2.4
 License: GNU General Public License v3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -39,6 +39,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 1. Gives you the ability to switch between registered user author and guest author.
 
 == Changelog ==
+= 2.62 =
+* 2026-05-05
+* minor code fix
 
 = 2.61 =
 * 2025-09-18
